@@ -5,7 +5,6 @@ import plotly.graph_objects as go
 def load_predator_data():
     """Loads data about predator types."""
     data = pd.read_csv("static/data/Predator_type.csv")
-    print(data)
     return data
 
 def prepare_predator_chart_data(data_df):
