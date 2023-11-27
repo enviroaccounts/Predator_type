@@ -2,45 +2,47 @@ from dash import Dash, html, dcc
 import pandas as pd
 import plotly.graph_objects as go
 
-def load_forest_land_use_data():
-    """Loads forest land use change data."""
-    return pd.read_csv("static/data/LandUseChange_Forest_1990_2016.csv")
+def load_predator_data():
+    """Loads data about predator types."""
+    data = pd.read_csv("static/data/Predator_type.csv")
+    print(data)
+    return data
 
-def prepare_forest_land_use_chart_data(data_df):
-    """Prepares data for the forest land use pie chart."""
-    land_use_data = data_df.iloc[0, 3:]  # land use columns start from the 4th column
-    labels = land_use_data.index.tolist()
-    values = land_use_data.values.tolist()
-    return labels, values
+def prepare_predator_chart_data(data_df):
+    """Prepares data for the predator pie chart."""
+    labels = data_df.iloc[:, 0].tolist()  
+    values = [float(value) for value in data_df.iloc[:, 1].tolist()]  
+    print('values',values)
 
-def create_forest_land_use_pie_chart(labels, values):
-    """Creates a pie chart for forest land use data."""
+
+def create_predator_pie_chart(labels, values):
+    """Creates a pie chart for predator data."""
     return go.Figure(data=[go.Pie(labels=labels, values=values)])
 
-def setup_dash_layout(app, fig_pie_chart):
-    """Sets up the layout of the Dash app."""
+def setup_predator_layout(app, fig_pie_chart):
+    """Sets up the layout of the Dash app for predator visualization."""
     app.layout = html.Div(children=[
         html.Div([
-            dcc.Graph(id='forest-land-use-pie-chart', figure=fig_pie_chart)
+            dcc.Graph(id='predator-pie-chart', figure=fig_pie_chart)
         ]),
         html.Div([  
-            html.H3(id='forest-land-use-pie-chart-description',children='Land uses converted from forestland since 1990.')
+            html.H3(id='predator-pie-chart-description', children='Types of pests being caught in traps across the catchment.')
         ])
-    ],id='forest-land-use-pie-chart-layout')
+    ], id='predator-pie-chart-layout')
 
 def create_app():
     """Creates and configures the Dash app."""
     app = Dash(__name__)
 
     # Load and prepare data
-    data_df = load_forest_land_use_data()
-    labels, values = prepare_forest_land_use_chart_data(data_df)
+    data_df = load_predator_data()
+    labels, values = prepare_predator_chart_data(data_df)
 
     # Create pie chart
-    fig_pie_chart = create_forest_land_use_pie_chart(labels, values)
+    fig_pie_chart = create_predator_pie_chart(labels, values)
 
     # Setup layout
-    setup_dash_layout(app, fig_pie_chart)
+    setup_predator_layout(app, fig_pie_chart)
 
     return app
 
