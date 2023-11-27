@@ -10,9 +10,10 @@ def load_predator_data():
 
 def prepare_predator_chart_data(data_df):
     """Prepares data for the predator pie chart."""
-    labels = data_df.iloc[:, 0].tolist()  
-    values = [float(value) for value in data_df.iloc[:, 1].tolist()]  
-    print('values',values)
+    labels = data_df.iloc[:, 0].tolist()
+    values = [float(str(value).strip()) for value in data_df.iloc[:, 1].tolist()]
+    return labels, values
+
 
 
 def create_predator_pie_chart(labels, values):
